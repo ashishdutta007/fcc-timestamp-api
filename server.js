@@ -1,11 +1,13 @@
 //Using express web http framework
 var express = require("express");
-//Using moment module
+//Using moment module (for date time related thongs)
 var moment = require("moment");
 var app = express();
 
-//Binding middleware to server object to recieve request to the path 
+//Binding middleware to server object to recieve request to the path
+///:dateStr -- named variable in the path, its value can be retrieved from [req.params.dateStr] 
 app.use('/:dateStr', function(request, response) {
+	//Handle errors
 	request.on('error', function(error) {
 		return console.log("Improper request, error occured : ", error);
 	});
@@ -13,9 +15,10 @@ app.use('/:dateStr', function(request, response) {
 		return console.log("Error occured in sending response: ", error);
 	});
 
+	//Retrieving date from request
 	var dateStr = request.params.dateStr.toString();
 
-	//check dateStr wheather is not-A-number
+	//Check dateStr wheather is not-A-number
 	if (!isNaN(dateStr)) {
 
 		var time = Number(dateStr);
