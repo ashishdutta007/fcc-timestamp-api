@@ -3,6 +3,7 @@ var express = require("express");
 //Using moment module (for date time related thongs)
 var moment = require("moment");
 var app = express();
+var port = process.env.port || 3000;
 
 //Binding middleware to server object to recieve request to the path
 ///:dateStr -- named variable in the path, its value can be retrieved from [req.params.dateStr] 
@@ -18,15 +19,18 @@ app.use('/:dateStr', function(request, response) {
 	//Retrieving date from request
 	var dateStr = request.params.dateStr.toString();
 
-	//Check dateStr wheather is not-A-number
+	//Check if 'dateStr' is not-A-number
 	if (!isNaN(dateStr)) {
 
 		var time = Number(dateStr);
+		//define @ the beginning, returns a moment object
+		//var naturalDate = moment();
+		//var unixTime = moment();
 
 		if (moment.unix(time).isValid()) {
-			var naturalDate = moment.unix(time);
+			var unixTime = moment(time, "X");
 			//Create a natural date out of unix timestamp
-			var unixTime = moment(time).format("X");
+			var naturalDate = moment(moment.unix(time), "MM DD, YYYY");
 
 			response.json({
 				"unix": unixTime,
@@ -41,13 +45,14 @@ app.use('/:dateStr', function(request, response) {
 			});
 			response.end();
 		}
-
 	}
 	else {
-		if (moment(dateStr, "MM D, YYYY").isValid()) {
-			var naturalDate = moment(dateStr, "MM D, YYYY");
-			//Create a natural date out of unix timestamp
+		//Checking validity of 'dateStr' string
+		if (moment(dateStr, "MM DD, YYYY").isValid()) {
 			var unixTime = moment(naturalDate).format("X");
+			//var unixTime = moment(naturalDate , "X");
+			//Create a natural date out of unix timestamp
+			var naturalDate = moment(dateStr, "MM DD, YYYY");
 
 			response.json({
 				"unix": unixTime,
@@ -65,11 +70,8 @@ app.use('/:dateStr', function(request, response) {
 	}
 });
 
-
-var port = process.env.port || 3000;
-
 app.listen(port, function() {
-	console.log('Example app listening on port' + port);
+	console.log('app listening on port' + port);
 });
 
 //moment is a wrapper around the 'Date' object
