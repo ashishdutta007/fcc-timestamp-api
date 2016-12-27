@@ -1,6 +1,7 @@
 var express = require("express");
 var app = express();
 
+//binding a middleware layer to server object
 app.use(function(req, res) {
 	res.write('Hello World!', 'utf8', function(err) {
 		if (err) {
