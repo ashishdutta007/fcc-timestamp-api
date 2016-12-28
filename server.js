@@ -71,8 +71,9 @@ app.use('/:dateStr', function(request, response) {
 });
 
 app.listen(port, function() {
-	console.log('app listening on port' + port);
+	console.log('app listening on port ' + port);
 });
+
 
 //moment is a wrapper around the 'Date' object
 /*var d = new Date('6 jan 1990 12:13:13 UTC');
