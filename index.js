@@ -3,7 +3,7 @@ var express = require("express");
 //Using moment module (for date time related thongs)
 var moment = require("moment");
 var app = express();
-var port = process.env.port || 3000;
+var port = process.env.PORT || 3000;
 
 //Binding middleware to server object to recieve request to the path
 ///:dateStr -- named variable in the path, its value can be retrieved from [req.params.dateStr] 
