@@ -8,70 +8,74 @@ var port = process.env.PORT || 3000;
 //Binding middleware to server object to recieve request to the path
 ///:dateStr -- named variable in the path, its value can be retrieved from [req.params.dateStr] 
 app.use('/:dateStr', function(request, response) {
-	//Handle errors
-	request.on('error', function(error) {
-		return console.log("Improper request, error occured : ", error);
-	});
-	response.on('error', function(error) {
-		return console.log("Error occured in sending response: ", error);
-	});
+    //Handle errors
+    request.on('error', function(error) {
+        return console.log("Improper request, error occured : ", error);
+    });
+    response.on('error', function(error) {
+        return console.log("Error occured in sending response: ", error);
+    });
 
-	//Retrieving date from request
-	var dateStr = request.params.dateStr.toString();
+    //Retrieving date from request
+    var dateStr = request.params.dateStr.toString();
 
-	//Check if 'dateStr' is not-A-number
-	if (!isNaN(dateStr)) {
+    //Check if 'dateStr' is not-A-number
+    if (!isNaN(dateStr)) {
+        console.log("It is a Number");
+        console.log(dateStr);
 
-		var time = Number(dateStr);
-		//define @ the beginning, returns a moment object
-		//var naturalDate = moment();
-		//var unixTime = moment();
+        var time = Number(dateStr);
+        //define @ the beginning, returns a moment object
+        //var naturalDate = moment();
+        //var unixTime = moment();
 
-		if (moment.unix(time).isValid()) {
-			var unixTime = moment(time, "X");
-			//Create a natural date out of unix timestamp
-			var naturalDate = moment(moment.unix(time), "MM DD, YYYY");
+        if (moment.unix(time).isValid()) {
+            //console.log(moment().format());
+            //var unixTime = moment(time, "X");
+            var unixTime = time;
+            console.log("unixTime", unixTime);
+            //Create a natural date out of unix timestamp
+            var naturalDate = moment.unix(time).format("MMM DD, YYYY");
+            console.log("naturalDate", naturalDate);
 
-			response.json({
-				"unix": unixTime,
-				"natural": naturalDate
-			});
-			response.end();
-		}
-		else {
-			response.json({
-				"unix": null,
-				"natural": null
-			});
-			response.end();
-		}
-	}
-	else {
-		//Checking validity of 'dateStr' string
-		if (moment(dateStr, "MM DD, YYYY").isValid()) {
-			var unixTime = moment(naturalDate).format("X");
-			//var unixTime = moment(naturalDate , "X");
-			//Create a natural date out of unix timestamp
-			var naturalDate = moment(dateStr, "MM DD, YYYY");
+            response.json({
+                "unix": unixTime,
+                "natural": naturalDate
+            });
+            response.end();
+        } else {
+            response.json({
+                "unix": null,
+                "natural": null
+            });
+            response.end();
+        }
+    } else {
+        //Checking validity of 'dateStr' string
+        if (moment(dateStr).isValid()) {
+            console.log("moment(dateStr)", moment(dateStr));
+            var unixTime = moment(dateStr).format("X");
+            //var unixTime = moment(naturalDate , "X");
+            //Create a natural date out of unix timestamp
+            var naturalDate = moment.unix(unixTime).format("MMM DD, YYYY");
 
-			response.json({
-				"unix": unixTime,
-				"natural": naturalDate
-			});
-			response.end();
-		}
-		else {
-			response.json({
-				"unix": null,
-				"natural": null
-			});
-			response.end();
-		}
-	}
+            response.json({
+                "unix": unixTime,
+                "natural": naturalDate
+            });
+            response.end();
+        } else {
+            response.json({
+                "unix": null,
+                "natural": null
+            });
+            response.end();
+        }
+    }
 });
 
 app.listen(port, function() {
-	console.log('app listening on port ' + port);
+    console.log('app listening on port ' + port);
 });
 
 
